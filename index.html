@@ -1,0 +1,333 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Avent Gen Z</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=DM+Sans:wght@400;500;700&display=swap">
+<style>
+  /* Concept : un mur de 24 cases façon stickers. Le numéro du jour sur la case fermée,
+     l'expression et la couleur de son année une fois ouverte. */
+  :root {
+    --bg: #eef1ec;
+    --fg: #15191a;
+    --muted: #55615c;
+    --line: #c9d1ca;
+    --tile: #ffffff;
+    --tile-open: #e2e9e3;
+    --accent: #d9283f;
+    --accent-fg: #ffffff;
+    --green: #0f5c45;
+    --scrim: rgba(10, 14, 12, 0.62);
+    --font-display: "Bricolage Grotesque", "Arial Narrow", system-ui, sans-serif;
+    --font-body: "DM Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0f1412;
+      --fg: #ecf1ec;
+      --muted: #9aa7a1;
+      --line: #2a3430;
+      --tile: #171e1b;
+      --tile-open: #202a26;
+      --accent: #ff5468;
+      --accent-fg: #1a0a0d;
+      --green: #5cc9a0;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0f1412;
+    --fg: #ecf1ec;
+    --muted: #9aa7a1;
+    --line: #2a3430;
+    --tile: #171e1b;
+    --tile-open: #202a26;
+    --accent: #ff5468;
+    --accent-fg: #1a0a0d;
+    --green: #5cc9a0;
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.5;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    padding-block: 32px 48px;
+  }
+  .wrap { max-width: 64rem; margin-inline: auto; }
+
+  header { display: grid; gap: 14px; margin-bottom: 28px; }
+  .eyebrow {
+    font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--muted); font-weight: 700; margin: 0;
+  }
+  h1 {
+    font-family: var(--font-display); font-weight: 800;
+    font-size: clamp(2.6rem, 9vw, 5.2rem); line-height: 0.95; letter-spacing: -0.03em;
+    margin: 0; text-wrap: balance;
+  }
+  h1 em { font-style: normal; color: var(--accent); }
+  .lede { max-width: 38rem; margin: 0; color: var(--muted); font-size: 1.05rem; }
+
+  .bar {
+    display: flex; flex-wrap: wrap; gap: 12px 24px; align-items: center;
+    padding-block: 14px; border-block: 1px solid var(--line); margin-bottom: 24px;
+  }
+  .bar label { display: inline-flex; gap: 8px; align-items: center; cursor: pointer; font-weight: 500; }
+  .bar input { accent-color: var(--accent); width: 18px; height: 18px; }
+  .count { margin-left: auto; font-variant-numeric: tabular-nums; font-weight: 700; }
+  .linkbtn {
+    background: none; border: 0; padding: 4px 2px; color: var(--muted); font: inherit;
+    text-decoration: underline; cursor: pointer;
+  }
+  .linkbtn:hover { color: var(--fg); }
+  #notice { min-height: 1.5em; margin: -12px 0 16px; color: var(--accent); font-weight: 500; }
+
+
+  .grid {
+    display: grid; gap: 10px; grid-template-columns: repeat(3, minmax(0, 1fr));
+    margin: 0; padding: 0; list-style: none;
+  }
+  @media (min-width: 560px) { .grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; } }
+  @media (min-width: 900px) { .grid { grid-template-columns: repeat(6, minmax(0, 1fr)); } }
+
+  .door {
+    width: 100%; height: 100%; min-height: 7.5rem; display: flex; flex-direction: column;
+    justify-content: space-between; align-items: flex-start; gap: 8px; text-align: left;
+    padding: 12px; border: 1.5px solid var(--fg); border-radius: 10px;
+    background: var(--tile); color: var(--fg); font: inherit; cursor: pointer;
+    box-shadow: 3px 3px 0 var(--fg);
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+  }
+  .door:hover { transform: translate(-1px, -1px); box-shadow: 5px 5px 0 var(--fg); }
+  .door:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--fg); }
+  .door:focus-visible, .btn:focus-visible, .close:focus-visible, .bar input:focus-visible {
+    outline: 3px solid var(--green); outline-offset: 3px;
+  }
+  .door .n { font-family: var(--font-display); font-weight: 800; font-size: 2.4rem; line-height: 1; font-variant-numeric: tabular-nums; }
+  .door .tag { font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); font-weight: 700; }
+  .door.open { background: var(--tile-open); }
+  .door.open .n { font-size: 0.8rem; font-weight: 700; color: var(--muted); }
+  .door .w {
+    font-family: var(--font-display); font-weight: 700; font-size: 1.05rem; line-height: 1.15;
+    overflow-wrap: anywhere; text-wrap: balance;
+  }
+  .door.locked { opacity: 0.55; cursor: not-allowed; box-shadow: none; border-style: dashed; }
+  .door.locked:hover { transform: none; box-shadow: none; }
+
+  .shake { animation: shake 0.35s; }
+  @keyframes shake { 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
+
+  footer { margin-top: 32px; color: var(--muted); font-size: 0.9rem; max-width: 40rem; }
+
+  /* fiche du jour */
+  .scrim {
+    position: fixed; inset: 0; z-index: 20; background: var(--scrim);
+    display: flex; align-items: center; justify-content: center;
+    padding-top: calc(16px + env(safe-area-inset-top, 0px));
+    padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    overflow-y: auto;
+  }
+  .card {
+    width: 100%; max-width: 30rem; margin: auto; background: var(--bg); color: var(--fg);
+    border: 1.5px solid var(--fg); border-radius: 14px; box-shadow: 6px 6px 0 var(--accent);
+    padding: 22px; display: grid; gap: 14px; position: relative;
+  }
+  .card .day { margin: 0; font-size: 0.8rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); font-weight: 700; padding-right: 40px; }
+  .card h2 {
+    font-family: var(--font-display); font-weight: 800; letter-spacing: -0.02em;
+    font-size: clamp(2rem, 8vw, 3rem); line-height: 1; margin: 0; overflow-wrap: anywhere; text-wrap: balance;
+  }
+  .card h3 { margin: 0 0 2px; font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+  .card p { margin: 0; }
+  .card .ex { padding: 12px 14px; border-left: 4px solid var(--green); background: var(--tile-open); border-radius: 0 8px 8px 0; }
+  .close {
+    position: absolute; top: 12px; right: 12px; width: 36px; height: 36px; border-radius: 999px;
+    border: 1.5px solid var(--fg); background: var(--tile); color: var(--fg); font-size: 1.1rem; cursor: pointer; line-height: 1;
+  }
+  .nav { display: flex; justify-content: space-between; gap: 10px; }
+  .btn {
+    padding: 8px 14px; border-radius: 8px; border: 1.5px solid var(--fg); background: var(--tile);
+    color: var(--fg); font: inherit; font-weight: 700; cursor: pointer;
+  }
+  .btn[disabled] { opacity: 0.4; cursor: not-allowed; }
+  .btn.pri { background: var(--accent); color: var(--accent-fg); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .door, .shake { transition: none; animation: none; }
+  }
+</style>
+
+<div class="wrap">
+  <header>
+    <p class="eyebrow">24 expressions et tendances du moment</p>
+    <h1>Avent <em>Gen Z</em></h1>
+    <p class="lede">Une expression ou une tendance TikTok par jour, du 1er au 24 décembre. Ouvre la case, apprends le mot, ressors-le au dîner de famille.</p>
+  </header>
+
+  <div class="bar">
+    <span class="count" id="count" aria-live="polite">0 / 24 ouvertes</span>
+    <button class="linkbtn" id="reset" type="button">Tout refermer</button>
+  </div>
+  <p id="notice" role="status"></p>
+
+  <ol class="grid" id="grid"></ol>
+
+  <footer>Ces expressions viennent surtout de TikTok, de Twitch et de la culture web. Leur sens glisse vite et varie selon les groupes : à utiliser avec le sourire. Une partie vient de l'argot français et du nouchi d'Abidjan. Plusieurs mots ont été élus mot de l'année par Oxford, Collins ou Dictionary.com.</footer>
+</div>
+
+<div class="scrim" id="scrim" hidden>
+  <div class="card" id="card" role="dialog" aria-modal="true" aria-labelledby="c-word">
+    <button class="close" id="close" type="button" aria-label="Fermer">✕</button>
+    <p class="day" id="c-day"></p>
+    <h2 id="c-word"></h2>
+    <div><h3>Ça veut dire</h3><p id="c-mean"></p></div>
+    <div><h3>Dans une phrase</h3><p class="ex" id="c-ex"></p></div>
+    <div class="nav">
+      <button class="btn" id="prev" type="button">← Veille</button>
+      <button class="btn pri" id="next" type="button">Lendemain →</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  var DAYS = [
+    { w: "No cap", m: "Sans mentir, pour de vrai. « Cap » veut dire mensonge ou exagération, un mot très présent dans le rap et toujours très recherché en ligne.", x: "Ce chocolat chaud est le meilleur de l'hiver, no cap." },
+    { w: "Cringe", m: "Gênant au point de faire grimacer : une situation, une vidéo, un comportement.", x: "Mon père qui danse sur la chanson de Noël en story : trop cringe." },
+    { w: "Quoicoubeh", m: "Mot sans sens qu'on lance à quelqu'un qui vient de dire « quoi ? ». Né d'un défi TikTok, il a envahi les cours de récré.", x: "« Tu sais ce que j'ai oublié ? » « Quoi ? » « Quoicoubeh ! »" },
+    { w: "Skeu skeu", m: "Un mot qui, selon le rappeur Jogga, « peut vouloir dire n'importe quoi ». Il l'a lancé avec un pas de danse sur TikTok.", x: "« Tu fais quoi pour le réveillon ? » « Skeu skeu. »" },
+    { w: "Rizz", m: "Charisme, talent pour séduire. Choisi mot de l'année par Oxford University Press.", x: "Il a fait rire toute la tablée avec une blague de cracker : ça, c'est du rizz." },
+    { w: "Delulu", m: "Raccourci de « delusional » : se raconter une histoire optimiste, voire irréaliste, en l'assumant avec humour.", x: "Je suis delulu : je crois toujours que le Père Noël répond aux lettres." },
+    { w: "Aura", m: "Prestance et charisme comptés en points : on gagne de l'aura (+1000) ou on en perd (−500).", x: "Il rattrape le sapin qui tombe d'une seule main : +1000 aura." },
+    { w: "Brain rot", m: "Contenu en ligne qui « pourrit le cerveau » par sa bêtise, et état d'esprit qui en résulte. Mot de l'année pour Oxford.", x: "Après quatre heures de vidéos de papillotes, j'ai le brain rot." },
+    { w: "Goumin", m: "Gros chagrin d'amour. Le mot vient du nouchi ivoirien et s'est répandu avec le rap.", x: "Elle m'a plaqué la veille de Noël : je suis en plein goumin." },
+    { w: "Un pain", m: "Une personne très belle, ou un crush (« mon pain »). Vient du nouchi, l'argot d'Abidjan. Dire « la boulangerie est ouverte », c'est repérer plein de beaux gosses au même endroit.", x: "Le nouveau voisin est un pain, et son frère aussi : la boulangerie est ouverte." },
+    { w: "PNJ", m: "Personnage non joueur : quelqu'un qui paraît passif ou sans relief, comme un figurant dans un jeu vidéo.", x: "Dans la file du marché de Noël, tout le monde avance en mode PNJ." },
+    { w: "Floper", m: "Rater son effet : se dit d'une blague, d'une vidéo ou d'un projet qui ne prend pas.", x: "Ma blague sur la dinde a floppé, personne n'a ri." },
+    { w: "Être guez", m: "Être nul ou maladroit à quelque chose. Le mot vient de « merguez ». « C'est guez » veut dire « c'est nul ».", x: "Je suis trop guez pour faire les nœuds des paquets cadeaux." },
+    { w: "Être bleu", m: "Être complètement ivre.", x: "Après le champagne de minuit, Tonton était bleu." },
+    { w: "Clanker", m: "Insulte pour désigner un robot ou une IA. Le mot vient de Star Wars et a explosé sur les réseaux.", x: "Mon aspirateur robot a avalé la guirlande : clanker." },
+    { w: "Rage bait", m: "Contenu fait pour te mettre en colère, afin que tu réagisses, commentes et cliques.", x: "« L'ananas sur la bûche, c'est meilleur » : du pur rage bait." },
+    { w: "Six-seven", m: "Mème sans sens précis, né de la chanson « Doot Doot (6 7) » de Skrilla : on dit « six-seven » en balançant les mains. Mot de l'année pour Dictionary.com.", x: "« Combien de papillotes dans la boîte ? » « Six-seven ! »" },
+    { w: "Crash out", m: "Craquer émotionnellement, piquer une crise. Parmi les termes d'argot les plus recherchés en ligne cette année.", x: "Quand le four est tombé en panne à midi le 25, j'ai crash out." },
+    { w: "Larping", m: "À l'origine, le jeu de rôle grandeur nature (LARP). Aujourd'hui, une moquerie pour un poseur qui fait semblant d'avoir un style de vie.", x: "Il dit avoir fait la bûche lui-même, mais il larpe : elle sort de la boulangerie." },
+    { w: "Askip", m: "À ce qu'il paraît. Contraction de « à ce qu'il paraît », toujours très employée par les jeunes.", x: "Askip il n'y aura pas de neige à Noël." },
+    { w: "Se mettre un tunnel", m: "Parler longuement d'un sujet ennuyeux sans laisser la moindre échappatoire à l'autre. Se dit « il m'a mis un tunnel ».", x: "Tonton m'a mis un tunnel sur la politique pendant tout l'apéro." },
+    { w: "Chokbar", m: "Très choqué, abasourdi : « choquer » plus le suffixe « bar ». Variante : « chokbar de bz ».", x: "J'ai vu le prix du sapin : chokbar." },
+    { w: "Mogging", m: "Surpasser ou éclipser quelqu'un, surtout par l'allure ou le style. Vient de AMOG, « Alpha Male Of the Group ». Élu mot de l'année par Collins.", x: "Mon sapin mogge celui des voisins, il est deux fois plus grand." },
+    { w: "Maxxing", m: "Suffixe tiré de « maximizing » : pousser une activité au maximum (sleepmaxxing, booksmaxxing). Élu mot de l'année par Dictionary.com.", x: "Pendant les vacances, je fais du sleepmaxxing : douze heures de sommeil par nuit." }
+  ];
+  var KEY = "avent-genz-v5";
+  var opened = {}, lockOn = true, current = -1, lastFocus = null;
+
+  var grid = document.getElementById("grid");
+  var notice = document.getElementById("notice");
+  var scrim = document.getElementById("scrim");
+
+  function load() {
+    try {
+      var s = JSON.parse(localStorage.getItem(KEY) || "{}");
+      opened = s.opened || {};
+    } catch (e) { opened = {}; }
+  }
+  function save() {
+    try { localStorage.setItem(KEY, JSON.stringify({ opened: opened })); } catch (e) {}
+  }
+
+  function allowedUntil() {
+    if (!lockOn) return 24;
+    var d = new Date();
+    if (d.getMonth() < 11) return 0;
+    if (d.getMonth() > 11) return 24;
+    return Math.min(24, d.getDate());
+  }
+
+  function render() {
+    var lim = allowedUntil(), n = 0;
+    grid.innerHTML = "";
+    DAYS.forEach(function (d, i) {
+      var day = i + 1, isOpen = !!opened[day], isLocked = day > lim;
+      if (isOpen) n++;
+      var li = document.createElement("li");
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "door" + (isOpen ? " open" : "") + (isLocked ? " locked" : "");
+      b.dataset.day = day;
+      if (isOpen) {
+        b.setAttribute("aria-label", "Jour " + day + " : " + d.w);
+        var top = document.createElement("span"); top.className = "n"; top.textContent = "Jour " + day;
+        var w = document.createElement("span"); w.className = "w"; w.textContent = d.w;
+        b.appendChild(top); b.appendChild(w);
+      } else {
+        b.setAttribute("aria-label", "Jour " + day + (isLocked ? ", pas encore disponible" : ", fermée"));
+        var num = document.createElement("span"); num.className = "n"; num.textContent = day;
+        var tag = document.createElement("span"); tag.className = "tag"; tag.textContent = isLocked ? "Bientôt" : "Ouvrir";
+        b.appendChild(num); b.appendChild(tag);
+      }
+      b.addEventListener("click", function () { openDay(day, b); });
+      li.appendChild(b); grid.appendChild(li);
+    });
+    document.getElementById("count").textContent = n + " / 24 ouvertes";
+    if (lockOn && lim === 0) notice.textContent = "La première case s'ouvre le 1er décembre.";
+    else if (!(notice.dataset.sticky)) notice.textContent = "";
+  }
+
+  function fill(day) {
+    var d = DAYS[day - 1];
+    document.getElementById("c-day").textContent = "Jour " + day + " sur 24";
+    document.getElementById("c-word").textContent = d.w;
+    document.getElementById("c-mean").textContent = d.m;
+    document.getElementById("c-ex").textContent = d.x;
+    var lim = allowedUntil();
+    document.getElementById("prev").disabled = day <= 1;
+    document.getElementById("next").disabled = day >= 24 || day + 1 > lim;
+  }
+
+  function openDay(day, btn) {
+    if (day > allowedUntil()) {
+      notice.dataset.sticky = "1";
+      notice.textContent = "La case " + day + " s'ouvrira le " + day + " décembre.";
+      if (btn) { btn.classList.remove("shake"); void btn.offsetWidth; btn.classList.add("shake"); }
+      return;
+    }
+    notice.dataset.sticky = ""; notice.textContent = "";
+    if (!scrim.hidden === false) lastFocus = btn || document.activeElement;
+    current = day; opened[day] = 1; save(); fill(day);
+    scrim.hidden = false;
+    document.getElementById("close").focus();
+    var keep = day; render();
+    current = keep;
+  }
+
+  function closeCard() {
+    scrim.hidden = true;
+    var target = grid.querySelector('[data-day="' + current + '"]');
+    (target || lastFocus || document.body).focus();
+  }
+
+  document.getElementById("close").addEventListener("click", closeCard);
+  scrim.addEventListener("click", function (e) { if (e.target === scrim) closeCard(); });
+  document.getElementById("prev").addEventListener("click", function () { if (current > 1) openDay(current - 1, null); });
+  document.getElementById("next").addEventListener("click", function () { if (current < 24) openDay(current + 1, null); });
+  document.addEventListener("keydown", function (e) {
+    if (scrim.hidden) return;
+    if (e.key === "Escape") closeCard();
+    if (e.key === "ArrowLeft" && current > 1) openDay(current - 1, null);
+    if (e.key === "ArrowRight" && current < 24) openDay(current + 1, null);
+  });
+  document.getElementById("reset").addEventListener("click", function () {
+    opened = {}; notice.dataset.sticky = ""; notice.textContent = ""; save(); render();
+  });
+
+  load(); render();
+})();
+</script>
+
+</body></html>
