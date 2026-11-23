@@ -8,11 +8,12 @@
      l'expression et la couleur de son année une fois ouverte. */
   :root {
     --bg: #eef1ec;
+    --page: #ffffff;
     --fg: #15191a;
     --muted: #55615c;
     --line: #c9d1ca;
     --tile: #ffffff;
-    --tile-open: #e2e9e3;
+    --tile-open: #fff3c4;
     --accent: #d9283f;
     --accent-fg: #ffffff;
     --green: #0f5c45;
@@ -20,36 +21,10 @@
     --font-display: "Bricolage Grotesque", "Arial Narrow", system-ui, sans-serif;
     --font-body: "DM Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
   }
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) {
-      --bg: #0f1412;
-      --fg: #ecf1ec;
-      --muted: #9aa7a1;
-      --line: #2a3430;
-      --tile: #171e1b;
-      --tile-open: #202a26;
-      --accent: #ff5468;
-      --accent-fg: #1a0a0d;
-      --green: #5cc9a0;
-      color-scheme: dark;
-    }
-  }
-  :root[data-theme="dark"] {
-    --bg: #0f1412;
-    --fg: #ecf1ec;
-    --muted: #9aa7a1;
-    --line: #2a3430;
-    --tile: #171e1b;
-    --tile-open: #202a26;
-    --accent: #ff5468;
-    --accent-fg: #1a0a0d;
-    --green: #5cc9a0;
-    color-scheme: dark;
-  }
 
   * { box-sizing: border-box; }
   body {
-    background: var(--bg);
+    background: var(--page);
     color: var(--fg);
     font-family: var(--font-body);
     font-size: 16px;
@@ -61,6 +36,15 @@
   .wrap { max-width: 64rem; margin-inline: auto; }
 
   header { display: grid; gap: 14px; margin-bottom: 28px; }
+  .head-top { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; }
+  .duck { display: block; flex: none; }
+  .duck-hero { width: clamp(96px, 20vw, 190px); height: auto; margin-bottom: -6px; }
+  .duck-hero:hover { animation: bob 0.6s ease-in-out; }
+  @keyframes bob { 0%,100% { transform: rotate(0); } 30% { transform: rotate(-8deg) translateY(-4px); } 65% { transform: rotate(5deg); } }
+  .ducks { display: flex; gap: 6px; margin-top: 14px; }
+  .ducks .duck { width: 44px; height: auto; }
+  .ducks .duck:nth-child(2) { transform: translateY(-3px) rotate(-6deg); }
+  .ducks .duck:nth-child(3) { transform: rotate(5deg); }
   .eyebrow {
     font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase;
     color: var(--muted); font-weight: 700; margin: 0;
@@ -73,9 +57,14 @@
   h1 em { font-style: normal; color: var(--accent); }
   .lede { max-width: 38rem; margin: 0; color: var(--muted); font-size: 1.05rem; }
 
+  .panel {
+    background: var(--tile); border: 2px solid var(--fg); border-radius: 14px;
+    box-shadow: 7px 7px 0 var(--fg); padding: 22px;
+  }
+  @media (max-width: 559px) { .panel { padding: 14px; box-shadow: 5px 5px 0 var(--fg); } }
   .bar {
     display: flex; flex-wrap: wrap; gap: 12px 24px; align-items: center;
-    padding-block: 14px; border-block: 1px solid var(--line); margin-bottom: 24px;
+    padding-bottom: 14px; border-bottom: 1px solid var(--line); margin-bottom: 20px;
   }
   .bar label { display: inline-flex; gap: 8px; align-items: center; cursor: pointer; font-weight: 500; }
   .bar input { accent-color: var(--accent); width: 18px; height: 18px; }
@@ -85,7 +74,7 @@
     text-decoration: underline; cursor: pointer;
   }
   .linkbtn:hover { color: var(--fg); }
-  #notice { min-height: 1.5em; margin: -12px 0 16px; color: var(--accent); font-weight: 500; }
+  #notice { min-height: 1.5em; margin: -8px 0 12px; color: var(--accent); font-weight: 500; }
 
 
   .grid {
@@ -98,13 +87,13 @@
   .door {
     width: 100%; height: 100%; min-height: 7.5rem; display: flex; flex-direction: column;
     justify-content: space-between; align-items: flex-start; gap: 8px; text-align: left;
-    padding: 12px; border: 1.5px solid var(--fg); border-radius: 10px;
-    background: var(--tile); color: var(--fg); font: inherit; cursor: pointer;
-    box-shadow: 3px 3px 0 var(--fg);
+    padding: 12px; border: 2px solid var(--fg); border-radius: 10px;
+    background: var(--bg); color: var(--fg); font: inherit; cursor: pointer;
+    box-shadow: 5px 5px 0 var(--fg);
     transition: transform 0.12s ease, box-shadow 0.12s ease;
   }
-  .door:hover { transform: translate(-1px, -1px); box-shadow: 5px 5px 0 var(--fg); }
-  .door:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--fg); }
+  .door:hover { transform: translate(-2px, -2px); box-shadow: 7px 7px 0 var(--fg); }
+  .door:active { transform: translate(3px, 3px); box-shadow: 2px 2px 0 var(--fg); }
   .door:focus-visible, .btn:focus-visible, .close:focus-visible, .bar input:focus-visible {
     outline: 3px solid var(--green); outline-offset: 3px;
   }
@@ -116,13 +105,14 @@
     font-family: var(--font-display); font-weight: 700; font-size: 1.05rem; line-height: 1.15;
     overflow-wrap: anywhere; text-wrap: balance;
   }
-  .door.locked { opacity: 0.55; cursor: not-allowed; box-shadow: none; border-style: dashed; }
+  .door.locked { opacity: 0.5; cursor: not-allowed; box-shadow: none; border-style: dashed; background: transparent; }
   .door.locked:hover { transform: none; box-shadow: none; }
 
   .shake { animation: shake 0.35s; }
   @keyframes shake { 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
 
-  footer { margin-top: 32px; color: var(--muted); font-size: 0.9rem; max-width: 40rem; }
+  footer { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--line); color: var(--muted); font-size: 0.9rem; }
+  footer p { margin: 0; max-width: 40rem; }
 
   /* fiche du jour */
   .scrim {
@@ -135,8 +125,8 @@
     overflow-y: auto;
   }
   .card {
-    width: 100%; max-width: 30rem; margin: auto; background: var(--bg); color: var(--fg);
-    border: 1.5px solid var(--fg); border-radius: 14px; box-shadow: 6px 6px 0 var(--accent);
+    width: 100%; max-width: 30rem; margin: 52px auto auto; background: var(--tile); color: var(--fg);
+    border: 2px solid var(--fg); border-radius: 14px; box-shadow: 7px 7px 0 var(--fg);
     padding: 22px; display: grid; gap: 14px; position: relative;
   }
   .card .day { margin: 0; font-size: 0.8rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); font-weight: 700; padding-right: 40px; }
@@ -146,44 +136,80 @@
   }
   .card h3 { margin: 0 0 2px; font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
   .card p { margin: 0; }
-  .card .ex { padding: 12px 14px; border-left: 4px solid var(--green); background: var(--tile-open); border-radius: 0 8px 8px 0; }
+  .card .duck-perch { position: absolute; top: -66px; right: 58px; width: 84px; height: auto; pointer-events: none; }
+  .card h2 { color: var(--fg); }
+  .card h2::after { content: ""; display: block; width: 56px; height: 5px; margin-top: 12px; background: var(--accent); border-radius: 3px; }
+  .card .ex { padding: 12px 14px; border-left: 4px solid var(--green); background: var(--bg); border-radius: 0 8px 8px 0; }
   .close {
     position: absolute; top: 12px; right: 12px; width: 36px; height: 36px; border-radius: 999px;
-    border: 1.5px solid var(--fg); background: var(--tile); color: var(--fg); font-size: 1.1rem; cursor: pointer; line-height: 1;
+    border: 2px solid var(--fg); background: var(--bg); color: var(--fg); font-size: 1.1rem; cursor: pointer; line-height: 1;
+    box-shadow: 3px 3px 0 var(--fg);
   }
   .nav { display: flex; justify-content: space-between; gap: 10px; }
   .btn {
-    padding: 8px 14px; border-radius: 8px; border: 1.5px solid var(--fg); background: var(--tile);
+    padding: 10px 16px; border-radius: 10px; border: 2px solid var(--fg); background: var(--bg);
     color: var(--fg); font: inherit; font-weight: 700; cursor: pointer;
+    box-shadow: 4px 4px 0 var(--fg); transition: transform 0.12s ease, box-shadow 0.12s ease;
   }
-  .btn[disabled] { opacity: 0.4; cursor: not-allowed; }
+  .btn:not([disabled]):active, .close:active { transform: translate(3px, 3px); box-shadow: 1px 1px 0 var(--fg); }
+  .btn[disabled] { opacity: 0.4; cursor: not-allowed; box-shadow: none; }
   .btn.pri { background: var(--accent); color: var(--accent-fg); }
 
   @media (prefers-reduced-motion: reduce) {
-    .door, .shake { transition: none; animation: none; }
+    .door, .shake, .btn, .duck-hero:hover { transition: none; animation: none; }
   }
 </style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="canard" viewBox="0 0 220 200">
+    <g stroke="#15191a" stroke-width="5" stroke-linejoin="round" stroke-linecap="round">
+      <path d="M30 120 C30 95 60 88 95 95 C120 100 140 98 160 92 C190 84 205 110 195 140 C185 172 150 185 105 185 C60 185 30 165 30 120 Z" fill="#ffd23f"/>
+      <path d="M28 112 C18 104 14 92 20 84 C30 96 38 100 44 104" fill="#ffd23f"/>
+      <path d="M85 128 C100 120 125 122 135 135 C120 150 98 150 85 128 Z" fill="#ffc20a"/>
+      <circle cx="140" cy="72" r="42" fill="#ffd23f"/>
+      <path d="M176 76 C192 70 208 74 212 82 C204 92 188 94 174 90 Z" fill="#ff8a1f"/>
+      <path d="M100 48 C112 14 150 6 176 30 L184 42 C160 40 130 40 104 50 Z" fill="#d9283f"/>
+      <path d="M98 50 C125 38 160 36 186 44" fill="none" stroke-width="10"/>
+      <path d="M98 50 C125 38 160 36 186 44" fill="none" stroke-width="5" stroke="#ffffff"/>
+      <circle cx="180" cy="26" r="10" fill="#ffffff"/>
+    </g>
+    <circle cx="155" cy="68" r="7" fill="#15191a"/>
+    <circle cx="157.5" cy="65.5" r="2.4" fill="#ffffff"/>
+    <ellipse cx="132" cy="86" rx="8" ry="5" fill="#ff9aa6" opacity="0.7"/>
+    <path d="M60 140 C70 150 80 155 92 156" fill="none" stroke="#fff6c2" stroke-width="5" stroke-linecap="round"/>
+  </symbol>
+</svg>
 
 <div class="wrap">
   <header>
     <p class="eyebrow">24 expressions et tendances du moment</p>
-    <h1>Avent <em>Gen Z</em></h1>
+    <div class="head-top">
+      <h1>Avent <em>Gen Z</em></h1>
+      <svg class="duck duck-hero" viewBox="0 0 220 200" role="img" aria-label="Un canard en plastique jaune avec un bonnet de Noël"><use href="#canard"/></svg>
+    </div>
     <p class="lede">Une expression ou une tendance TikTok par jour, du 1er au 24 décembre. Ouvre la case, apprends le mot, ressors-le au dîner de famille.</p>
   </header>
 
-  <div class="bar">
-    <span class="count" id="count" aria-live="polite">0 / 24 ouvertes</span>
-    <button class="linkbtn" id="reset" type="button">Tout refermer</button>
-  </div>
-  <p id="notice" role="status"></p>
+  <main class="panel">
+    <div class="bar">
+      <span class="count" id="count" aria-live="polite">0 / 24 ouvertes</span>
+      <button class="linkbtn" id="reset" type="button">Tout refermer</button>
+    </div>
+    <p id="notice" role="status"></p>
 
-  <ol class="grid" id="grid"></ol>
+    <ol class="grid" id="grid"></ol>
+  </main>
 
-  <footer>Ces expressions viennent surtout de TikTok, de Twitch et de la culture web. Leur sens glisse vite et varie selon les groupes : à utiliser avec le sourire. Une partie vient de l'argot français et du nouchi d'Abidjan. Plusieurs mots ont été élus mot de l'année par Oxford, Collins ou Dictionary.com.</footer>
+  <footer><p>Ces expressions viennent surtout de TikTok, de Twitch et de la culture web. Leur sens glisse vite et varie selon les groupes : à utiliser avec le sourire. Une partie vient de l'argot français et du nouchi d'Abidjan. Plusieurs mots ont été élus mot de l'année par Oxford, Collins ou Dictionary.com.</p>
+    <div class="ducks" aria-hidden="true">
+      <svg class="duck" viewBox="0 0 220 200"><use href="#canard"/></svg><svg class="duck" viewBox="0 0 220 200"><use href="#canard"/></svg><svg class="duck" viewBox="0 0 220 200"><use href="#canard"/></svg>
+    </div>
+  </footer>
 </div>
 
 <div class="scrim" id="scrim" hidden>
   <div class="card" id="card" role="dialog" aria-modal="true" aria-labelledby="c-word">
+    <svg class="duck duck-perch" viewBox="0 0 220 200" aria-hidden="true"><use href="#canard"/></svg>
     <button class="close" id="close" type="button" aria-label="Fermer">✕</button>
     <p class="day" id="c-day"></p>
     <h2 id="c-word"></h2>
